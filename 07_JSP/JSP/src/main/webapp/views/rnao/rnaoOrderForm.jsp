@@ -13,7 +13,7 @@
                 <table>
                 구매자 : <input type="text" id="rnao" name="userName"  placeholder="구매자의 이름을 입력하세요" ><br>
                 상품명 : <input type="text" id="tkdvna" name="product"  placeholder="구매 상품 명을 입력하세요." ><br>
-                가격 : <input type="text" id="price" name="price"  placeholder="구매 가격을 입력하세요"><br>
+                
                 구매 수량 : <input type="number" name="number" onclick="tnfid(this)" id="tnfid" min="10" max="100" step="10" placeholder="최소 10"> <br>
                 납품 등급 : <input type="range" name="grade" min="2" max="9" step="2"><br>
                 기타사항 : <textarea name="order"></textarea>
