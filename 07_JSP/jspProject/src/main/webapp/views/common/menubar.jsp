@@ -84,6 +84,8 @@
         		//단순한 페이지 요청도 servlet을 거쳐갈 것(즉, url에는 서블릿맵핑값만 나타나도록)
         	}
         </script>
+        
+        
         </c:when>
         <c:otherwise>
         	<div>

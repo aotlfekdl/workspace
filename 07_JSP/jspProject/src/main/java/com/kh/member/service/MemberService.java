@@ -33,19 +33,83 @@ public class MemberService {
 		}
 
 		
-		public int updateMember(Member m) {
+		public Member updateMember(Member m) {
 			Connection conn = getConnection();
 			int result = new MemberDao().updateMember(conn, m);
-			
+			Member updateMember = null;
 			if(result>0) {
 				commit(conn);
+				updateMember = new MemberDao().selectMemberByUserId(conn, m.getUserId());
 			}else {
 				rollback(conn);
 			}
 			
 			close(conn);
+			return updateMember;
+		}
+		
+//		public int passwordMember(Member m) {
+//			Connection conn = getConnection();
+//			int result = new MemberDao().passwordMember(conn, m);
+//			
+//			if(result>0) {
+//				commit(conn);
+//			}else {
+//				rollback(conn);
+//			}
+//			
+//			close(conn);
+//			return result;
+//			
+//		}
+		
+		public Member updateMemberPwd(String userId, String updatePwd) {
+			Connection conn = getConnection();
+			int result = new MemberDao().updateMemberPwd(conn, userId, updatePwd);
+			
+			Member updateMember = null;
+			
+			if(result>0) {
+				commit(conn);
+				updateMember = new MemberDao().selectMemberByUserId(conn, userId);
+			}else {
+				rollback(conn);
+			}
+			
+			close(conn);
+			return updateMember;
+		}
+			
+		
+		public Member deleteMember(String userId, String userPwd) {
+			Connection conn = getConnection();
+			
+			
+			Member updateMember = null;
+			
+			updateMember = new MemberDao().selectMemberByUserId(conn, userId);
+			int result = new MemberDao().deleteMember(conn,userId, userPwd);
+			
+			
+			
+			if(updateMember !=null) {
+				selectPwd = new MemberDao().selectMemberByUserPwd(conn, userId);
+				
+				
+				
+			}
+			
+			if(result > 0) {
+				commit(conn);
+			}else {
+				rollback(conn);
+			}
+			
 			return result;
 		}
+		
+		
+		
 
 		
 

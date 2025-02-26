@@ -3,125 +3,212 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insert title here</title>
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Insert title here</title>
+	<style>
+		.outer{
+			background: #4b89fc;
+			color: white;
+			width: 1000PX;
+			margin: auto;
+			margin-top: 50px;
+			padding: 10px 0px 50px;
+		}
 
-<style>
-	.outer{
-		background: rgb(116, 184, 240);
-		color: black;
-		width: 1000px;
-		margin: auto;
-		margin-top: 50px;
-		padding: 10px 0px 50px;
-	}
+		.outer table{
+			margin: auto;
+		}
 
-	.outer table{
-		margin: 0 auto;
-	}
+		#update-pwd-modal .modal-body form{
+			display: flex;
+			
 
-	
-	
-</style>
+		}
+	</style>
 </head>
-
 <body>
-<%@ include file="../common/menubar.jsp" %>
-
+	<%@ include file="../common/menubar.jsp" %>
+	
 	<div class="outer">
 		<br>
 		<h2 align="center">내 정보</h2>
-	
-	<form action="${pageContext.request.contextPath}/update.me" method="post" id="update-form">
-		
-		<table>
-			<tr>
-				<td>* 아이디</td>
-				<td><input type="text" name="userId" maxlength="15" readonly value="${loginUser.userId}"></td>
-				<td><button type="button">중복확인</button></td>
-			</tr>
-			<tr>
-				<td>* 비밀번호</td>
-				<td><input type="text" name="userPwd" maxlength="15" value="${loginUser.userPwd}"></td>
-				<td></td>
-			</tr>
-
-			<tr>
-				<td>* 이름</td>
-				<td><input type="text" name="userName" maxlength="8" readonly value="${loginUser.userName}"></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>전화번호</td>
-				<td><input type="text" name="phone" placeholder="-포함해서 입력" value="${loginUser.phone}"></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>이메일</td>
-				<td><input type="text" name="email" value="${loginUser.email}"></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>주소</td>
-				<td><input type="text" name="address" value="${loginUser.address }"></td>
-				<td></td>
-			</tr>
-			
-			<tr>
-				<td>관심분야</td>
-				<td colspan="2">
-					<label for="">
-						<input type="checkbox" name="interest" value="운동">운동
-						<input type="checkbox" name="interest" value="등산">등산
-						<input type="checkbox" name="interest" value="낚시">낚시
+		<form action="${pageContext.request.contextPath}/update.me" method="post" id="update-form">
+			<table>
+				<tr>
+					<td>* 아이디</td>
+					<td><input type="text" name="userId" maxlength="15" readonly value="${loginUser.userId}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>* 이름</td>
+					<td><input type="text" name="userName" maxlength="8" readonly value="${loginUser.userName}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>전화번호</td>
+					<td><input type="text" name="phone" placeholder="- 포함해서 입력" value="${loginUser.phone}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>이메일</td>
+					<td><input type="text" name="email" value="${loginUser.email}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>주소</td>
+					<td><input type="text" name="address" value="${loginUser.address}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>관심분야</td>
+					<td colspan="2">
+						<label>
+							<input type="checkbox" name="interest" value="운동">
+							운동
+						</label>
+						<label>
+							<input type="checkbox" name="interest" value="등산">
+							등산
+						</label>
+						<label>
+							<input type="checkbox" name="interest" value="낚시">
+							낚시
+						</label>
 						<br>
-						<input type="checkbox" name="interest" value="요리">요리
-						<input type="checkbox" name="interest" value="게임">게임
-						<input type="checkbox" name="interest" value="영화">영화
-						<input type="checkbox" name="interest" value="기타">기타
-	
-					</label>
-				</td>	
-			</tr>
-		</table>
-		<script>
-			const interest = "${loginUser.interest}"; //"낚시, 등산"
-			const inputArr = document.querySelectorAll("input[name=interest]");
-			
-			for(let input of inputArr){ 
-				if(interest.includes(input.value)){ //interest에 input.value의 값이 포함되어 있다면 true
-					input.checked =true;
+						<label>
+							<input type="checkbox" name="interest" value="요리">
+							요리
+						</label>
+						<label>
+							<input type="checkbox" name="interest" value="게임">
+							게임
+						</label>
+						<label>
+							<input type="checkbox" name="interest" value="영화">
+							영화
+						</label>
+						<label>
+							<input type="checkbox" name="interest" value="기타">
+							기타
+						</label>
+					</td>
+				</tr>
+			</table>
+			<script>
+				const interest = "${loginUser.interest}"; //"낚시,등산"
+				const inputArr = document.querySelectorAll("input[name=interest]");
+				
+				for(let input of inputArr){ 
+					if(interest.includes(input.value)){ // interest에 input.value의 값이 포함되어 있다면
+						input.checked = true;
+					}
 				}
-			}
 			</script>
 
-		<br><br>
-		<div align="center">
-			<button type="submit" action="${pageContext.request.contextPath}/myPage.me">정보수정</button>
-			<button type="button">비밀번호 변경</button>
-			<button type="button">회원탈퇴</button>
-			
-		</div>
-	</form>
+			<br><br>
 
-	<script>
-		function checkPwd(){
-			const pwd= document.querySelector("#enroll-form input[name=userPwd]").value;
-			const pwdCheck= document.querySelector("#enroll-form input[name=userPwdCheck]").value;
+			<div align="center">
+				<button type="submit" class="btn btn-sm btn-success">정보수정</button>
+				<button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#update-pwd-modal">비밀번호 변경</button>
+				<button type="button" class="btn btn-sm btn-danger"  data-bs-toggle="modal" data-bs-target="#delete-modal">회원탈퇴</button>
+			</div>
+		</form>
+	</div>
+	<!-- 
+		탈퇴하기 버튼 클릭 시 
+		탈퇴 후 복구가 불가능합니다.
+		정말 탈퇴하시겠습니까?
+		비밀번호 : 
+		탈퇴하기 버튼 -> /delete.me
+		=> /delete.me받은 서버는 비밀번호가 맞는지 확인 후 status -> N으로 변경하고 로그아웃
+	 -->
+
+	
+	
+	<!-- 비밀번호 변경 팝업 -->
+	<div class="modal" id="update-pwd-modal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h4 class="modal-title">비밀번호 변경</h4>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <!-- Modal body -->
+	      <div class="modal-body">
+			<form action="${pageContext.request.contextPath}/updatePwd.me">
+				<table align="center">
+					<tr>
+						<td>현재 비밀번호</td>
+						<td><input type="password" name="userPwd" required></td>
+					</tr>
+					<tr>
+						<td>변경할 비밀번호</td>
+						<td><input type="password" name="updatePwd" required></td>
+					</tr>
+					<tr>
+						<td>변경할 비밀번호 학인</td>
+						<td><input type="password" name="checkPwd" id="edit-pwd-btn" required></td>
+					</tr>
+				</table>
+				<br>
+				<button type="submit" class="btn btn-sm btn-primary" >비밀번호 변경</button>
+			</form>
+			<script>
+			document.getElementById('edit-pwd-btn').onclick = function(){
+						
+			const pwd = document.querySelector("#update-pwd-modal input[name=updatePwd]").value;
+			const pwdCheck = document.querySelector("#update-pwd-modal input[name=checkPwd]").value;
 			
 			if(pwd !== pwdCheck){
 				alert("비밀번호가 일치하지 않습니다.");
 				return false;
 			}
 		}
+			</script>
 
-
-	</script>
-</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	
+		<!-- 회원탈퇴 팝업 -->
+	<div class="modal" id="delete-modal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h4 class="modal-title">회원탈퇴</h4>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <!-- Modal body -->
+	      <div class="modal-body">
+			<form action="${pageContext.request.contextPath}/delete.me">
+				<table align="center">
+					<tr>
+						<td>탈퇴 후 복구가 불가능합니다.<br>정말 탈퇴하시겠습니까?</td>
+						
+						<td></td>
+					</tr>
+					<tr>
+						<td>비밀번호 :</td>
+						<td><input type="password" name="userPwd" required></td>
+					</tr>
+				
+				</table>
+				<br>
+				<button type="submit" class="btn btn-sm btn-primary" >탈퇴하기 버튼</button>
+			</form>
+			
 
-
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </body>
-</html>	
+</html> 

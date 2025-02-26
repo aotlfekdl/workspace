@@ -46,17 +46,59 @@
 	</entry>
 	
 	<entry key="updateMember">
+		UPDATE MEMBER
+		   SET PHONE = ?,
+		       EMAIL = ?,
+		       ADDRESS = ?,
+		       INTEREST = ?,
+		       MODIFY_DATE = SYSDATE
+		 WHERE USER_ID = ?
+	</entry>
+	
+	<entry key="passwordMember">
 		UPDATE MEMBER 
-		SET USER_ID =?,
-			USER_PWD =?,
-			USER_NAME =?,
-			PHONE =?,
-			EMAIL =?,
-			ADDRESS =?,
-			INTEREST =?
-			WHERE USER_ID = ?
+		SET USER_PWD = ?
+		WHERE USER_ID= ?
+	</entry>
+	
+	
+<entry key="selectMemberByUserId">
+		SELECT USER_NO,
+			USER_ID,
+			USER_PWD,
+			USER_NAME,
+			PHONE,
+			EMAIL,
+			ADDRESS,
+			INTEREST,
+			ENROLL_DATE,
+			MODIFY_DATE,
+			STATUS
+		FROM MEMBER
+		WHERE USER_ID = ?
+		AND STATUS = 'Y'
+	</entry>
+	
+		<entry key="updateMemberPwd">
+		UPDATE MEMBER
+		   SET USER_PWD =?,  
+		   MODIFY_DATE = SYSDATE     
+		 WHERE USER_ID = ?
+	</entry>
+	
+	<entry key="deleteMember">
+		DELETE FROM MEMBER
+		WHERE USER_ID = ?
 		
 	</entry>
 	
-
+	<entry key="selectMemberByUserPwd">
+		SELECT 
+			USER_PWD
+		FROM MEMBER
+		WHERE USER_ID = ?
+		AND STATUS = 'Y'
+	</entry>
+	
+	
 </properties>
