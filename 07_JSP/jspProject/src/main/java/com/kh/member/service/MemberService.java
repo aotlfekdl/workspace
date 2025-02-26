@@ -1,6 +1,6 @@
 package com.kh.member.service;
 
-import static com.kh.common.JDBCTemplate.close;
+import static com.kh.common.JDBCTemplate.*;
 import static com.kh.common.JDBCTemplate.getConnection;
 
 import java.sql.Connection;
@@ -17,4 +17,36 @@ public class MemberService {
 			return m;
 			
 		}
+		public int insertMember(Member m) {
+			Connection conn = getConnection();
+			
+			int result = new MemberDao().insertMember(conn,m);
+			
+			if(result>0) {
+				commit(conn);
+			}else {
+				rollback(conn);
+			}
+			
+			close(conn);
+			return result;
+		}
+
+		
+		public int updateMember(Member m) {
+			Connection conn = getConnection();
+			int result = new MemberDao().updateMember(conn, m);
+			
+			if(result>0) {
+				commit(conn);
+			}else {
+				rollback(conn);
+			}
+			
+			close(conn);
+			return result;
+		}
+
+		
+
 }
