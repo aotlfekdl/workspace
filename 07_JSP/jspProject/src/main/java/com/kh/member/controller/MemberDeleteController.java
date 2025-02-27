@@ -38,7 +38,9 @@ public class MemberDeleteController extends HttpServlet {
 		HttpSession session = request.getSession();
 
 		Member loginUser = (Member)session.getAttribute("loginUser");
+	
 		
+		String userId = loginUser.getUserId();
 		
 		
 		
@@ -49,14 +51,22 @@ public class MemberDeleteController extends HttpServlet {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			
 			return;
+		}else {
+			result = new MemberService().deleteMember(userId);
 		}
-		Member updateMember = new MemberService().deleteMember(loginUser.getUserId(), userPwd);
+		
+		
 		
 		if(result > 0) { //성공
-			session.setAttribute("alertMsg", "탈퇴가 정상적으로 처리되었습니다.");
-			session.invalidate();
+//			session.setAttribute("alertMsg", "탈퇴가 정상적으로 처리되었습니다.");
+//			session.invalidate();  //세션이 만료되었기 때문에 위의 alert메시지를 사용할 수 없다.  그래서 removeAttribute를 사용한다.
 			
-			response.sendRedirect(request.getContextPath() + "/myPage.me");
+
+			
+			session.removeAttribute("loginUser");
+			session.setAttribute("alertMsg", "회원탈퇴가 정상적으로 처리되었습니다.");
+			
+			response.sendRedirect(request.getContextPath());
 		}else {
 			session.setAttribute("errorMsg", "탈퇴가 되지 않았습니다.");
 

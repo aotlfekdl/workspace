@@ -87,8 +87,11 @@
 	</entry>
 	
 	<entry key="deleteMember">
-		DELETE FROM MEMBER
-		WHERE USER_ID = ?
+
+		UPDATE MEMBER SET
+		 STATUS = 'N',
+		 MODIFY_DATE = SYSDATE 
+		 WHERE USER_ID = ?
 		
 	</entry>
 	

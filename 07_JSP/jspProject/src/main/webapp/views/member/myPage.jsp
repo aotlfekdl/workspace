@@ -202,7 +202,7 @@
 				
 				</table>
 				<br>
-				<button type="submit" class="btn btn-sm btn-primary" >탈퇴하기 버튼</button>
+				<button type="submit" class="btn btn-sm btn-danger" >탈퇴하기 버튼</button>
 			</form>
 			
 

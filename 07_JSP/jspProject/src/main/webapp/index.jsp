@@ -26,6 +26,10 @@
 	<%--<% JDBCTemplate.getConnection();%> --%>
 	
 	<%@ include file="views/common/menubar.jsp" %>
+	
+	<jsp:forward page="views/notice/noticeListView.jsp"></jsp:forward>
+
+	
 
 </body>
 </html>

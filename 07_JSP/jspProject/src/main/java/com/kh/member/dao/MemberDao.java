@@ -1,17 +1,18 @@
 
 package com.kh.member.dao;
 
+import static com.kh.common.JDBCTemplate.close;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import com.kh.member.model.vo.Member;
-
-import static com.kh.common.JDBCTemplate.*;
 
 public class MemberDao {
 	private Properties prop = new Properties();
@@ -187,7 +188,7 @@ String sql = prop.getProperty("updateMemberPwd");
 	}
 	
 	
-	public int deleteMember(Connection conn,String userId, String userPwd) {
+	public int deleteMember(Connection conn,String userId) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
@@ -207,6 +208,40 @@ String sql = prop.getProperty("updateMemberPwd");
 		}
 		
 		return result;
+	}
+	
+	public ArrayList<Member> selectMemberByUserPwd(Connection conn, String userId, String userPwd) {
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		Member m = new Member();
+		ArrayList<Member> list = new ArrayList<>();
+		
+		String sql = prop.getProperty("selectMemberByUserPwd");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			while(rset.next()) {
+				pstmt.setString(1, userId);
+
+				list.add(m);
+				System.out.println(list);
+				
+			}
+			rset = pstmt.executeQuery();
+			System.out.println(list);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+		
+		
 	}
 	
 	

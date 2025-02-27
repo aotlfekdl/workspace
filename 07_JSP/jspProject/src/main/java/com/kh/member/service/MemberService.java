@@ -4,6 +4,7 @@ import static com.kh.common.JDBCTemplate.*;
 import static com.kh.common.JDBCTemplate.getConnection;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import com.kh.member.dao.MemberDao;
 import com.kh.member.model.vo.Member;
@@ -81,24 +82,13 @@ public class MemberService {
 		}
 			
 		
-		public Member deleteMember(String userId, String userPwd) {
+		public int deleteMember(String userId) {
 			Connection conn = getConnection();
+			int result = 0;
 			
+			result = new MemberDao().deleteMember(conn, userId);
 			
-			Member updateMember = null;
-			
-			updateMember = new MemberDao().selectMemberByUserId(conn, userId);
-			int result = new MemberDao().deleteMember(conn,userId, userPwd);
-			
-			
-			
-			if(updateMember !=null) {
-				selectPwd = new MemberDao().selectMemberByUserPwd(conn, userId);
-				
-				
-				
-			}
-			
+
 			if(result > 0) {
 				commit(conn);
 			}else {
