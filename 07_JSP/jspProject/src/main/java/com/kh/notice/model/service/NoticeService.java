@@ -26,5 +26,7 @@ public class NoticeService {
 	public ArrayList<Notice> selectList(Notice pi){
 		Connection conn = getConnection();
 		
+		ArrayList<Notice> list = new NoticeDao().selectList(conn, pi);
+		
 	}
 }

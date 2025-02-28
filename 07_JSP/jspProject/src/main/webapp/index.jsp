@@ -24,10 +24,10 @@
 		게시글작성-첨부파일업로드(c), 게시판리스트조회(r), 상세조회(r)
 	 --%>
 	<%--<% JDBCTemplate.getConnection();%> --%>
+
 	
 	<%@ include file="views/common/menubar.jsp" %>
 	
-	<jsp:forward page="views/notice/noticeListView.jsp"></jsp:forward>
 
 	
 

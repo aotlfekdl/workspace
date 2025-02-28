@@ -41,11 +41,17 @@
 
     <%@ include file="../common/menubar.jsp" %>
 
-    <div class="outer">
+   <div class="outer">
         <br>
         <h2 align="center">일반게시판</h2>
         <br>
-
+        
+        <c:if test="${not empty loginUser}">
+        
+        <div  align="right" style="width:870px"; margin-bottom: 6px;">
+        	<a href="${pageContext.request.contextPath}/enrollForm.bo" class="btn btn-sm btn-primary" >글쓰기</a>
+        </div>
+		</c:if>
         <table align="center" class="list-area">
             <thead>
                 <th width="70">글 번호</th>
@@ -59,7 +65,7 @@
             
             <c:forEach var="b" items="${list}">
             
-                <tr>
+                <tr onclick="location.href='${pageContext.request.contextPath}/detail.bo?bno=${b.boardNo}'">
                     
                     <td>${b.boardNo}</td>
                     <td>${b.categoryName}</td>
@@ -85,7 +91,7 @@
             </c:when>
             
             <c:otherwise>
-				<button class="btn btn-sm btn-primary" onclick="location.href='${pageContext.request.contextPath}/list.bo?cpage=${p}'">1</button>
+				<button class="btn btn-sm btn-primary" onclick="location.href='${pageContext.request.contextPath}/list.bo?cpage=${p}'">${p}</button>
 				
 				
 				</c:otherwise>

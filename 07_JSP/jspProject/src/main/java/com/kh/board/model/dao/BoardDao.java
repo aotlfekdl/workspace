@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Category;
 import com.kh.common.vo.PageInfo;
 
 public class BoardDao {
@@ -21,18 +23,18 @@ public class BoardDao {
 		super();
 		
 		String filePath = BoardDao.class.getResource("/db/sql/board-mapper.xml").getPath();
+		
 		try {
 			prop.loadFromXML(new FileInputStream(filePath));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public int selectListCount(Connection conn) {
-		//select -> //ResultSet(한 행) -> int
-		
+		//select -> ResultSet(한행) -> int
 		int listCount = 0;
+		
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -40,21 +42,19 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			
 			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
-				listCount = rset.getInt("COUNT");
+				listCount = rset.getInt("count");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			close(rset);
 			close(pstmt);
 		}
-		return listCount;
 		
+		return listCount;
 	}
 	
 	public ArrayList<Board> selectList(Connection conn, PageInfo pi){
@@ -68,12 +68,12 @@ public class BoardDao {
 		String sql = prop.getProperty("selectList");
 		
 		try {
-			
 			/*
-			 * currentPage : 1-> 1~10
-			 * currentPage : 2-> 11~20
-			 * currentPage : 3-> 21~30
+			 * currnetPage : 1 -> 1~10
+			 * currnetPage : 2 -> 11~20
+			 * currnetPage : 3 -> 21~30
 			 * */
+			
 			int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1;
 			int endRow = startRow + pi.getBoardLimit() - 1;
 			
@@ -85,9 +85,8 @@ public class BoardDao {
 			
 			while(rset.next()) {
 				Board b = new Board();
-				
 				b.setBoardNo(rset.getInt("BOARD_NO"));
-				b.setCategoryName(rset.getString("CATEGORY_NAME"));
+				b.setCategoryName(rset.getString("CATEGORY_NAME"));;
 				b.setBoardTitle(rset.getString("BOARD_TITLE"));
 				b.setUserId(rset.getString("USER_ID"));
 				b.setCount(rset.getInt("COUNT"));
@@ -95,6 +94,180 @@ public class BoardDao {
 				
 				list.add(b);
 			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+	
+	public ArrayList<Category> selectCategory(Connection conn){
+		ArrayList<Category> list = new ArrayList<>();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectCategory");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				list.add(new Category(
+							rset.getInt("CATEGORY_NO"),
+							rset.getString("CATEGORY_NAME")
+						));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+	
+	public int insertBoard(Connection conn, Board b) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String sql = prop.getProperty("insertBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, b.getCategoryNo());
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
+			pstmt.setInt(4, b.getBoardWriter());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+
+	}
+	
+	public int insertAttachment(Connection conn, Attachment at) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String sql = prop.getProperty("insertAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, at.getOriginName());
+			pstmt.setString(2, at.getChangeName());
+			pstmt.setString(3, at.getFilePath());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+
+	}
+	
+	
+	public int increaseCount(Connection conn, int boardNo) {
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("increaseCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			result = pstmt.executeUpdate();
+					
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+		
+	}
+	
+	
+	public ArrayList<Board> selectDetail(Connection conn, int boardNo){
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		ArrayList<Board> list = new ArrayList<>();
+		
+		
+		String sql = prop.getProperty("selectDetail");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				Board b = new Board();
+				
+				b.setBoardNo(rset.getInt("BOARD_NO"));
+				b.setCategoryName(rset.getString("CATEGORY_NAME"));;
+				b.setBoardTitle(rset.getString("BOARD_TITLE"));
+				b.setBoardContent(rset.getString("BOARD_CONTENT"));
+				b.setUserId(rset.getString("USER_ID"));
+				b.setCreateDate(rset.getString("CREATE_DATE"));
+				
+				list.add(b);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	
+	public Attachment selectAttachment(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Attachment at = null;
+		
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				at = new Attachment();
+				at.setFileNo(rset.getInt("FILE_NO"));
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				at.setFilePath(rset.getString("FILE_PATH"));
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,9 +275,13 @@ public class BoardDao {
 			close(rset);
 			close(pstmt);
 		}
+		return at;
 		
-		return list;
+		
+		
 		
 	}
+	
+	
 
 }

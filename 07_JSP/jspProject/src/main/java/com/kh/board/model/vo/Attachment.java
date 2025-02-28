@@ -13,7 +13,15 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
-	private int categoryNo;
-	private String categoryName;
+public class Attachment {
+	private int fileNo;
+	private int refBoardNo;
+	private String originName;
+	private String changeName;
+	private String filePath;
+	private Date uploadDate;
+	private int fileLevel;
+	private String status;
+
+
 }

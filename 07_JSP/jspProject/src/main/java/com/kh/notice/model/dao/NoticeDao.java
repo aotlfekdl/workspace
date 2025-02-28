@@ -1,14 +1,17 @@
 package com.kh.notice.model.dao;
 
+import static com.kh.common.JDBCTemplate.close;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
-import static com.kh.common.JDBCTemplate.*;
+import com.kh.notice.model.vo.Notice;
 
 public class NoticeDao {
 	
@@ -58,6 +61,14 @@ public class NoticeDao {
 		return  listCount;
 		
 		
+	}
+	
+	public ArrayList<Notice> selectList(Connection conn, Notice pi){
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = rset = null;
+		
+		String sql = 
 	}
 	
 	
