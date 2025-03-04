@@ -1,23 +1,30 @@
 package com.kh.board.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.kh.board.model.vo.Attachment;
+import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Category;
+import com.kh.board.service.BoardService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * Servlet implementation class BoardDetailModifyController
+ * Servlet implementation class BoardUpdateFormController
  */
-@WebServlet("/detailModify.bo")
-public class BoardDetailModifyController extends HttpServlet {
+@WebServlet("/updateForm.bo")
+public class BoardUpdateFormController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardDetailModifyController() {
+    public BoardUpdateFormController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,18 +33,19 @@ public class BoardDetailModifyController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//수정하기
-		//기존의 정보를 가져온 다음 title, content, category 등을 수정할 수 있게 하기
-		//현재 보고있는 게시판의 넘버 가져오기
-		//수정할 때 작성자id랑 세션의 id랑 같은지 확인하기
+		int boardNo = Integer.parseInt(request.getParameter("bno"));
 		
+		BoardService bService = new BoardService();
 		
-		String boardNo = request.getParameter("bno");
-		System.out.println(boardNo);
+		ArrayList<Category> list = bService.selectCategory();
+		Board b = bService.selectBoard(boardNo);
+		Attachment at = bService.selectAttachment(boardNo);
 		
+		request.setAttribute("list", list);
+		request.setAttribute("b", b);
+		request.setAttribute("at", at);
 		
-		
-		
+		request.getRequestDispatcher("views/board/boardUpdateForm.jsp").forward(request, response);
 	}
 
 	/**

@@ -105,7 +105,7 @@
         <div class="menu"><a href="">HOME</a></div>
         <div class="menu"><a href="${pageContext.request.contextPath}/list.no?cpage=1">공지사항</a></div>
         <div class="menu"><a href="${pageContext.request.contextPath}/list.bo?cpage=1">일반게시판</a></div>
-        <div class="menu"><a href="">사진게시판</a></div>
+        <div class="menu"><a href="${pageContext.request.contextPath}/list.th">사진게시판</a></div>
     </div>
             
             

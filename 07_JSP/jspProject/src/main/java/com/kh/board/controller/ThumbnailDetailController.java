@@ -1,9 +1,7 @@
 package com.kh.board.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.service.BoardService;
 
@@ -14,16 +12,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class BoardDetailController
+ * Servlet implementation class ThumbnailDetailController
  */
-@WebServlet("/detail.bo")
-public class BoardDetailController extends HttpServlet {
+@WebServlet("/detail.th")
+public class ThumbnailDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardDetailController() {
+    public ThumbnailDetailController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,42 +30,23 @@ public class BoardDetailController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//조회수 1 증가 시키고 
-		//Board정보 가지고 
-		//그럼 일단 no를 가지고 있어야 겠네?
-
-		
-		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		//게시글에 대한 정보를 담아와야한다. 
+		//BOARD 로 받아오기 가능? type2 로 구별 가능하긴함
 		
 		
-		BoardService bService = new BoardService();
-		int result = bService.increaseCount(boardNo);
+		int thumbNo = Integer.parseInt(request.getParameter("bno"));
+		System.out.println(thumbNo);
 		
 		
-		//Board b = bService.selectBoard(boardNo);
-			
+		Board b = new Board();
+		b= new BoardService().selectThumbnail(thumbNo);
+		System.out.println(b.getThumbnailImg());
+		System.out.println(b);
 		
-		
-		Board b = bService.selectBoard(boardNo);
-		
-		
-		
-		if(result> 0 && b != null) {
-			Attachment at = bService.selectAttachment(boardNo);
+		if(b != null) {
 			request.setAttribute("board", b);
-			request.setAttribute("attachment", at);
-			request.setAttribute("alertMst", "성공?");
-			request.getRequestDispatcher("views/board/boardDetailView.jsp").forward(request, response);			
-		}else {
-			request.setAttribute("errorMsg", "정상적인 접근이 아닙니다.");
-
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-				
-			
-		
+			request.getRequestDispatcher("views/board/thumbDetailView.jsp").forward(request, response);
 		}
-		
-		
 	}
 
 	/**

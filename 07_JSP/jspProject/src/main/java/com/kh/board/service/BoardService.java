@@ -110,4 +110,79 @@ public class BoardService {
 		
 		return at;
 	}
+	
+	public Board selectBoard(int boardNo) {
+		Connection conn = getConnection();
+		
+		Board b = new BoardDao().selectBoard(conn, boardNo);
+		close(conn);
+		
+		return b;
+	}
+	
+	
+	public int updateBoard(Board b, Attachment at) {
+		Connection conn = getConnection();
+		BoardDao bDao = new BoardDao();
+		
+		int result1 = bDao.updateBoard(conn, b);
+		
+		int result2 = 1;
+		if(at != null) { //첨부파일이 있을 때
+			if(at.getFileNo() != 0) { //기존첨부파일 있을 때 -> update
+				result2 = bDao.updateAttachment(conn, at);
+			}else { //기존첨부파일이 없을 때 -> insert
+				result2 = bDao.insertNewAttachment(conn, at);
+			}
+			
+		}
+		if(result1 > 0 && result2 >0) {
+			commit(conn);
+			
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1 * result2;
+	
+	}
+	
+	public ArrayList<Board> selectThumbnailList(){
+		Connection conn = getConnection();
+		
+		ArrayList<Board> list = new BoardDao().selectThumbnailList(conn);
+		
+		close(conn);
+		
+		return list;
+	}
+	
+	public int insertThumbnailBoard(Board b, ArrayList<Attachment> list) {
+		Connection conn = getConnection();
+
+		BoardDao bDao = new BoardDao();
+		int result1 = bDao.insertThumbnailBoard(conn, b);
+		int result2= bDao.insertAttachmentList(conn, list);
+
+		if(result1 > 0 && result2 >0) {
+			commit(conn);
+			
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1 * result2;
+	}
+	
+	public Board selectThumbnail(int thumbNo){
+		Connection conn = getConnection();
+		
+		Board b = new BoardDao().selectThumbnail(conn, thumbNo);
+		
+		close(conn);
+		return b;
+	}
+
 }

@@ -12,26 +12,24 @@ import org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.service.BoardService;
-import com.kh.member.model.vo.Member;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class BoardInsertController
+ * Servlet implementation class BoardUpdateController
  */
-@WebServlet("/insert.bo")
-public class BoardInsertController extends HttpServlet {
+@WebServlet("/update.bo")
+public class BoardUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardInsertController() {
+    public BoardUpdateController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,28 +38,7 @@ public class BoardInsertController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		//enctype이 multipart/form-data일 때 request로 값 추출이 불가
-		//System.out.println(request.getParameter("title"));
-		//System.out.println(request.getParameter("upfile"));
-		
-		/**
-		 * 파일 업로드를 위해서
-		    commons-fileupload2-core-2.0.0-M2.jar
-			commons-fileupload2-jakarta-2.0.0-M1.jar
-			commons-io-2.16.1.jar 라이브러리를 사용하겠다.
-			
-			commons-fileupload2-core : 주요기능을 구현하는 라이브러리(멀티파트 요청에 대한 처리기능)
-			commons-fileupload2-jakarta : javax.servlet -> jakarta.servlet 패키지를 사용하게 하는 라이브러리
-			commons-io : 파일 읽기/쓰기에 대한 스트림(입출력기능)을 구현하고 있는 라이브러리
-		 */
-		
-		//enctype이 multipart/form-data로 전송이되었는지 체크
-		
 		if(JakartaServletFileUpload.isMultipartContent(request)) {
-			HttpSession session = request.getSession();
-			
-			//1. 파일용량제한(byte)
 			int fileMaxSize = 1024 * 1024 * 50; //50MB
 			int requestMaxSize = 1024 * 1024 * 60; //전체요청 크기제한
 			
@@ -76,19 +53,23 @@ public class BoardInsertController extends HttpServlet {
 			
 			upload.setFileSizeMax(fileMaxSize);
 			upload.setSizeMax(requestMaxSize);
-		
+			
 			//요청(request)로부터 파일아이템(요청정보) 파싱
 			List<FileItem> formItems = upload.parseRequest(request);
 			
 			Board b = new Board();
 			Attachment at = null;
-			Member m = (Member)session.getAttribute("loginUser");
-			b.setBoardWriter(m.getUserNo());
+			String originFileNo = null;
 			
 			for(FileItem item : formItems) {
+			
 				//업로드된 데이터가 일반 폼 필드인지, 파일인지를 구분할 수 있음
 				if(item.isFormField()) { //일반파라미터
 					switch(item.getFieldName()) {
+					case "bno":
+						int bno = Integer.parseInt(item.getString(Charset.forName("UTF-8")));
+						b.setBoardNo(bno);
+						break;
 						case "category":
 							int categoryNo = Integer.parseInt(item.getString(Charset.forName("UTF-8")));
 							b.setCategoryNo(categoryNo);
@@ -99,18 +80,20 @@ public class BoardInsertController extends HttpServlet {
 						case "content":
 							b.setBoardContent(item.getString(Charset.forName("UTF-8")));
 							break;
+						case "originFileNo":
+							originFileNo = item.getString(Charset.forName("UTF-8"));
+							break;
 					}
 				} else {//파일
-					String originName = item.getName();
+					String originName = item.getName(); //업로드 요청한 새로운 파일 명
 					if(originName.length()>0) {
 
-					
 					String tmpName = "kh_" + System.currentTimeMillis() + ((int)(Math.random() * 100000) + 1);
 					String type = originName.substring(originName.lastIndexOf("."));
-					String chageName = tmpName + type;
+					String chageName = tmpName + type; //서버에 저장할 파일명
 					
 					File f = new File(savePath, chageName);
-					item.write(f.toPath());
+					item.write(f.toPath()); //지정한 경로에 파일 업로드
 					
 					at = new Attachment();
 					at.setOriginName(originName);
@@ -121,23 +104,29 @@ public class BoardInsertController extends HttpServlet {
 				}
 			}
 			
-			//저장정보를 request객체에서 가져온 상태
-	
-			
-			int result = new BoardService().insertBoard(b, at);
-			
-			if(result > 0) {
-				request.getSession().setAttribute("alertMsg", "일반게시글 작성 성공");
-				response.sendRedirect(request.getContextPath() + "/list.bo?cpage=1");
-			}else {
-				if(at != null) {
-					new File(savePath + at.getChangeName()).delete();
+			if(at != null) {//업로드할 첨부파일이 있을 때
+				if(originFileNo != null) { //기존 첨부파일 존재 
+					at.setFileNo(Integer.parseInt(originFileNo));
+				}else { //기존 첨부파일이 없을 때
+					at.setRefBoardNo(b.getBoardNo());
 				}
-			session.setAttribute("errorMsg", "게시글 작성 실패");
+			}
+			
+			int result = new BoardService().updateBoard(b, at);
+			//새로운 첨부파일 X,              b, null -> board update
+			//새로운 첨부파일 o, 기존첨부파일 o  b, fileNo -> board update, attchment update
+			//새로운 첨부파일 o, 기존첨부파일 x  b, refBoardNo -> board update, attchmentinsert
+			
+			if(result >0) {
+				request.getSession().setAttribute("alertMsg", "일반게시글 수정 성공");
+				response.sendRedirect(request.getContextPath() +  "/detail.bo?bno=" + b.getBoardNo());
+			}else {
+				request.setAttribute("errorMsg", "게시글 작성 실패");
 
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 				
 			}
+		
 		}
 	}
 

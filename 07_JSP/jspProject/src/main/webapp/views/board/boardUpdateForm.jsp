@@ -41,7 +41,7 @@
 
 	<div class="outer">
 		<br>
-		<h2 align="center">일반게시글 작성하기</h2>
+		<h2 align="center">일반게시글 수정하기</h2>
 		<br>
 		
 		<%--
@@ -49,13 +49,20 @@
 			기본적인 form 전송시 인코딩 타입 -> application/x-www-form-urlencoded
 		 --%>
 
-		<form action="${pageContext.request.contextPath}/insert.bo" method="post" enctype="multipart/form-data">
-			<table align="center" class="list-area">
+		<form action="${pageContext.request.contextPath}/update.bo" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="bno" value="${b.boardNo}">
+            <table align="center" class="list-area">
 				<tr>
 					<th width="70">카테고리</th>
 					<td width="500">
 						<select name="category">
-							<c:forEach var="c" items="${categorys}">
+							<c:forEach var="c" items="${list}">
+                                <c:choose>
+                                    <c:when test ="${c.categoryNo ==b.categoryNo}">
+										<option value="${c.categoryNo}" selected>${c.categoryName}</option>
+                                    </c:when>
+                                </c:choose>
+
 								<option value="${c.categoryNo}">${c.categoryName}</option>
 							</c:forEach>
 						</select>
@@ -64,18 +71,22 @@
 				<tr>
 					<th>제목</th>
 					<td>
-						<input type="text" name="title" required>
+						<input type="text" name="title" required value="${b.boardTitle}">
 					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td>
-						<textarea name="content" rows="10" style="resize: none;"></textarea>
+						<textarea name="content" rows="10" style="resize: none;">${b.boardContent}</textarea>
 					</td>
 				</tr>
 				<tr>
 					<th>첨부파일</th>
 					<td>
+                        <c:if test="${at != null}">
+                           ${at.originName}
+                           <input type="hidden" name="originFileNo" value="${at.fileNo}"> 
+                        </c:if>
 						<input type="file" name="upfile">
 					</td>
 				</tr>
@@ -84,7 +95,7 @@
 			<br>
 
 			<div align="center">
-				<button type="submit">작성하기</button>
+				<button type="submit">수정하기</button>
 				<button type="reset">취소하기</button>
 			</div>
 		</form>

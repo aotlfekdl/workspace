@@ -51,27 +51,27 @@
 
 			<table align="center" class="list-area">
 			
-			  <c:forEach var="b" items="${list}">
+			
 				<tr>
 					<th width="70">카테고리</th>
-					<td width="70">${b.categoryName}</td>
+					<td width="70">${board.categoryName}</td>
 					<th width="70">제목</th>
-					<td width="350">${b.boardTitle}</td>
+					<td width="350">${board.boardTitle}</td>
 				
 				
 				</tr>
 
 				<tr>
 					<th>작성자</th>
-					<td>${b.userId}</td>
+					<td>${board.userId}</td>
 					<th>작성일</th>
-					<td>${b.createDate}</td>
+					<td>${board.createDate}</td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td colspan="3">
 						<p style="height: 200px">
-							${b.boardContent}
+							${board.boardContent}
 						</p>
 						
 					</td>
@@ -99,10 +99,12 @@
 
 			<div align="center">
 				<a class="btn btn-sm" href="${pageContext.request.contextPath}/list.bo?cpage=1">목록가기</a>
-				<a class="btn btn-sm" href="${pageContext.request.contextPath}/detailModify.bo?cpage=${b.boardNo}">수정하기</a>
-				<a class="btn btn-sm">삭제하기</a>
+				<c:if test="${loginUser != null && loginUser.userId == board.userId}">
+					<a class="btn btn-sm" href="${pageContext.request.contextPath}/updateForm.bo?bno=${board.boardNo}">수정하기</a>
+					<a class="btn btn-sm">삭제하기</a>
+				</c:if>
 			</div>
-			</c:forEach>
+			
 	</div>
 </body>
 
