@@ -65,46 +65,51 @@
                 <td>${board.userId}</td>
                 <th>작성일</th>
                 <td>${board.createDate}</td>
+               
+            </tr>
+            <tr> <th>조회수</th>
+                <td>${board.count}</td>
             </tr>
             <tr>
                 <th>내용</th>
                 <td colspan="3">
-                    <p style="height: 50px">
-                    ${board.boardContent}
-                    </p>
-                    
+                   <div>
+                   ${board.boardContent}
+                   </div>
                 </td>
             </tr>
             <tr>
                 <th>대표이미지</th>
-                <td><img src="${pageContext.request.contextPath}/${board.thumbnailImg}" alt=""></td>
-                <td>${pageContext.request.contextPath}/resources/thumbnail_upfile/${board.originName}</td>
+                <td colspan="3"><img width="200px" height="100px" src="${pageContext.request.contextPath}/${board.thumbnailImg}" alt=""></td>
             </tr>
 
-        <tr>
-            <th>첨부파일</th>
-            <td colspan="3">
+			   <tr>
+                <th>상세이미지</th>
+                <td colspan="3">
                 <c:choose>
-                    <c:when test="${empty attachment}">
-                        첨부파일이 없습니다.
-                    </c:when>
-                    <c:otherwise>
-                        <a download="${attachment.originName }" 
-                           href="${pageContext.request.contextPath}/${attachment.filePath}${attachment.changeName}">
-                           과연 어떤사진?
-                        </a>
-                    </c:otherwise>
+                <c:when test="${empty list}">
+                	상세이미지가 없습니다.
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="b" items="${list}">
+                            <img width="200px" height="150px" src="${pageContext.request.contextPath}/${b.thumbnailImg}" alt="썸네일이미지">
+                        </div>
+                    </c:forEach>
+                </c:otherwise>
                 </c:choose>
-            </td>
-        </tr>
+                </td>
+                
+               
+            </tr>
+  
         </table>
 
         <br>
 
         <div align="center">
-            <a class="btn btn-sm" href="${pageContext.request.contextPath}/list.bo?cpage=1">목록가기</a>
+            <a class="btn btn-sm" href="${pageContext.request.contextPath}/list.th">목록가기</a>
             <c:if test="${loginUser != null && loginUser.userId == board.userId}">
-                <a class="btn btn-sm" href="${pageContext.request.contextPath}/updateForm.bo?bno=${board.boardNo}">수정하기</a>
+                <a class="btn btn-sm" href="${pageContext.request.contextPath}/updateForm.th?bno=${board.boardNo}">수정하기</a>
                 <a class="btn btn-sm">삭제하기</a>
             </c:if>
         </div>

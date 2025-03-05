@@ -3,7 +3,8 @@ package com.kh.board.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.kh.board.model.vo.Board;
+import com.google.gson.Gson;
+import com.kh.board.model.vo.Reply;
 import com.kh.board.service.BoardService;
 
 import jakarta.servlet.ServletException;
@@ -13,16 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class AjaxReplyListController
  */
-@WebServlet("/list.th")
-public class ThumbnailListController extends HttpServlet {
+@WebServlet("/rlist.bo")
+public class AjaxReplyListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public AjaxReplyListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,14 +32,16 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		//서버로부터 댓글 목록 가져오기
+		ArrayList<Reply> list = new BoardService().selectReplyList(boardNo);
 		
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		System.out.println(list);
+		//response.setContentType("text/html; charset=utf-8");
+		response.setContentType("text/html; charset=utf-8");
 		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
-
-		request.getRequestDispatcher("views/board/thumbDateView.jsp").forward(request, response);
+		new Gson().toJson(list, response.getWriter());
+		
+		
 	}
 
 	/**

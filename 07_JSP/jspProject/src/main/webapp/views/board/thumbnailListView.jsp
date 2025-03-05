@@ -38,6 +38,11 @@
             white-space: nowrap;
             overflow: hidden;
         }
+        
+        .thumbnaul:hover{
+        cursor: pointer;
+        
+        }
     </style>
 </head>
 <body>

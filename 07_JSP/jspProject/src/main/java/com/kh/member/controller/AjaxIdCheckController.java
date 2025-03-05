@@ -1,10 +1,8 @@
-package com.kh.board.controller;
+package com.kh.member.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.kh.board.model.vo.Board;
-import com.kh.board.service.BoardService;
+import com.kh.member.service.MemberService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,16 +11,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class AjaxIdCheckController
  */
-@WebServlet("/list.th")
-public class ThumbnailListController extends HttpServlet {
+@WebServlet("/idCheck.me")
+public class AjaxIdCheckController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public AjaxIdCheckController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,14 +29,16 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String checkId = request.getParameter("checkId");
 		
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		System.out.println(list);
+		int count = new MemberService().idCheck(checkId);
 		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
-
-		request.getRequestDispatcher("views/board/thumbDateView.jsp").forward(request, response);
+		if(count >0) {//회원이 존재함
+			response.getWriter().print("NNNNN");
+		}else { //회원이 존재하지 않음
+			response.getWriter().print("NNNNY");
+			
+		}
 	}
 
 	/**

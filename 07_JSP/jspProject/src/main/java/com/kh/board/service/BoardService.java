@@ -12,6 +12,7 @@ import com.kh.board.model.dao.BoardDao;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.model.vo.Category;
+import com.kh.board.model.vo.Reply;
 import com.kh.common.vo.PageInfo;
 
 public class BoardService {
@@ -184,5 +185,41 @@ public class BoardService {
 		close(conn);
 		return b;
 	}
+	public ArrayList<Board> selectThumbnail2(int thumbNo){
+		Connection conn = getConnection();
+		
+		
+		ArrayList<Board> list = new BoardDao().selectThumbnail2(conn, thumbNo);
+		
+		close(conn);
+		
+		return list;
+	}
 
+	public int insertReply(Reply r) {
+		Connection conn = getConnection();
+		
+		int result = new BoardDao().insertReply(conn, r);
+
+		if(result > 0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
+	
+	public ArrayList<Reply> selectReplyList(int boardNo){
+		
+		Connection conn = getConnection();
+		
+		ArrayList<Reply> list =new BoardDao().selectReplyList(conn, boardNo);
+		
+		close(conn);
+		
+		return list;
+	}
+
+	
 }

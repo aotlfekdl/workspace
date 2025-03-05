@@ -14,6 +14,7 @@ import java.util.Properties;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.model.vo.Category;
+import com.kh.board.model.vo.Reply;
 import com.kh.common.vo.PageInfo;
 
 public class BoardDao {
@@ -488,6 +489,7 @@ public Board selectBoard(Connection conn, int boardNo) {
 				b.setBoardTitle(rset.getString("BOARD_TITLE"));
 				b.setBoardContent(rset.getString("BOARD_CONTENT"));
 				b.setCount(rset.getInt("COUNT"));
+				b.setThumbnailImg(rset.getString("THUMBNAIL_IMG"));
 				b.setCreateDate(rset.getString("CREATE_DATE"));
 				b.setOriginName(rset.getString("ORIGIN_NAME"));
 				b.setUserId(rset.getString("USER_ID"));
@@ -502,10 +504,99 @@ public Board selectBoard(Connection conn, int boardNo) {
 			close(pstmt);
 		}
 		return b;
-		
-
 	}
 	
+	public ArrayList<Board> selectThumbnail2(Connection conn, int thumbNo){
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Board> list = new ArrayList<>();
+		
+		String sql = prop.getProperty("selectThumbnail2");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, thumbNo);
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				Board b = new Board();
+				b.setBoardTitle(rset.getString("BOARD_TITLE"));
+				b.setBoardContent(rset.getString("BOARD_CONTENT"));
+				b.setCount(rset.getInt("COUNT"));
+				b.setThumbnailImg(rset.getString("THUMBNAIL_IMG"));
+				b.setCreateDate(rset.getString("CREATE_DATE"));
+				b.setOriginName(rset.getString("ORIGIN_NAME"));
+				b.setUserId(rset.getString("USER_ID"));
+				list.add(b);
+			
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+		
+	}
 	
+	public int insertReply(Connection conn, Reply r) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String spl = prop.getProperty("insertReply");
+		
+		try {
+			pstmt = conn.prepareStatement(spl);
+			
+			pstmt.setString(1, r.getReplyContent());
+			pstmt.setInt(2, r.getRefBoardNo());
+			pstmt.setInt(3, r.getReplyWriter());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public ArrayList<Reply> selectReplyList(Connection conn, int boardNo){
+
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		ArrayList<Reply> list = new ArrayList<>();
+		
+		String sql = prop.getProperty("selectReplyList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Reply r = new Reply();
+				r.setReplyNo(rset.getInt("REPLY_NO"));
+				r.setReplyContent(rset.getString("REPLY_CONTENT"));
+				r.setUserId(rset.getString("USER_ID"));
+				r.setCreateDate(rset.getString("CREATE_DATE"));
+				
+				list.add(r);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+	}
 	
 }

@@ -244,28 +244,35 @@ String sql = prop.getProperty("updateMemberPwd");
 		
 	}
 	
-	
-//	public int deleteMember(Connection conn, String userId) {
-//		int result = 0;
-//		PreparedStatement pstmt = null;
-//		
-//		String sql = prop.getProperty("deleteMember");
-//		
-//		try {
-//			pstmt = conn.prepareStatement(sql);
-//			
-//			pstmt.setString(1, userId);
-//			
-//			result = pstmt.executeUpdate();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}finally {
-//			close(pstmt);
-//		}
-//		
-//		return result;
-//	}
+	public int idcheck(Connection conn, String userId) {
+		//select -> 같은 ID로 되어있는 멤버 숫자로만 조회 -> resultSet 
+		int count =0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("idcheck");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userId);
+			
+			rset =pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count = rset.getInt("count");
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return count;
+	}
 	
 	
 }

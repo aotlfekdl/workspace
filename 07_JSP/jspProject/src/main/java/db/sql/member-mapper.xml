@@ -103,5 +103,13 @@
 		AND STATUS = 'Y'
 	</entry>
 	
+		<entry key="idcheck">
+		SELECT COUNT(*) AS "COUNT"
+		FROM MEMBER
+		WHERE USER_ID = ?
+
+		
+	</entry>
+	
 	
 </properties>
