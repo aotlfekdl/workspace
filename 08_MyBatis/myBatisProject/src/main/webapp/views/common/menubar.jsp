@@ -18,6 +18,12 @@
         color: white;
         height: 50px;
     }
+    
+   	.nav-area a{
+        text-decoration: none;
+        color: white;
+    }
+    
     .menu{
         display: table-cell;
         width: 250px;
@@ -32,10 +38,6 @@
     	color: white;
     	margin: auto;
     	margin-top: 50px;
-    }
-    .nav-area a{
-        text-decoration: none;
-
     }
 </style>
 </head>

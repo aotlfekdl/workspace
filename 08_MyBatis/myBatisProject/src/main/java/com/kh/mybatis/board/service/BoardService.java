@@ -8,9 +8,10 @@ import com.kh.mybatis.common.PageInfo;
 
 public interface BoardService {
 	int selectListCount();
-	ArrayList<Board> selectList(PageInfo pi);  
-	int selectSeachCount(HashMap<String, String> map);
-
+	ArrayList<Board> selectList(PageInfo pi);
+	
+	int selectSearchCount(HashMap<String, String> map);
 	ArrayList<Board> selectSearchList(HashMap<String, String> map, PageInfo pi);
-
+	Board selectDetail(int board);
+	int increaseCount(int board);
 }

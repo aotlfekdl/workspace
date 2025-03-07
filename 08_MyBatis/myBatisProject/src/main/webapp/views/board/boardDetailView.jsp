@@ -19,28 +19,28 @@
         <table align="center" border="1">
             <tr>
                 <td width="100">글번호</td>
-                <td width="500">1</td>
+                <td width="500">${b.boardNo}</td>
             </tr>
             <tr>
                 <td>제목</td>
-                <td>글입니다</td>
+                <td>${b.boardTitle}</td>
             </tr>
             <tr>
                 <td>작성자</td>
-                <td>admin</td>
+                <td>${b.userId}</td>
             </tr>
             <tr>
                 <td>조회수</td>
-                <td>10</td>
+                <td>${b.count}</td>
             </tr>
             <tr>
                 <td>작성일</td>
-                <td>24/04/09</td>
+                <td>${b.createDate}</td>
             </tr>
             <tr>
                 <td>내용</td>
                 <td height="100">
-                    이글은 무엇인가요?
+                    ${b.boardContent}
                 </td>
             </tr>
         </table>
@@ -49,10 +49,12 @@
 
         <table align="center" border="1">
             <tr>
+            <form action="${pageContext.request.contextPath}/reply.bo?${b.boardNo}">
                 <th>댓글작성</th>
                 <th><textarea></textarea></th>
                 <th><button>등록</button></th>
             </tr>
+            </form>
             <tr>
                 <td colspan="3"><b>댓글(1)</b></td> <!-- fn:length(list) -->
             </tr>

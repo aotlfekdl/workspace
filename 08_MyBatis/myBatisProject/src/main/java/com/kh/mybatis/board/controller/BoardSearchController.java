@@ -34,32 +34,26 @@ public class BoardSearchController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String condition = request.getParameter("condition"); //writer | title | content
-		String keyword = request.getParameter("keyword"); //사용자가 입력한 키워드 값
-		System.out.println(condition);
-		System.out.println(keyword);
-		
-		int currentPage = Integer.parseInt(request.getParameter("cpage"));
+		String condition = request.getParameter("condition"); // writer | title | content
+		String keyword = request.getParameter("keyword"); //사용자가 입력한 키워드값
+
+		int cuurentPage = Integer.parseInt(request.getParameter("cpage"));
 		
 		HashMap<String, String> map = new HashMap<>();
 		map.put("keyword", keyword);
 		map.put("condition", condition);
 		
-		
 		BoardService bService = new BoardServiceImpl();
 		
-		int listCount = bService.selectSeachCount(map);
-		
-		System.out.println("listCount : "+ listCount);
-		
-		PageInfo pi = new PageInfo(listCount, currentPage, 10, 5);
+		int listCount = bService.selectSearchCount(map);
+		PageInfo pi = new PageInfo(listCount, cuurentPage, 10, 5);
 		
 		ArrayList<Board> list = bService.selectSearchList(map, pi);
-		request.setAttribute("map", map);
 		
 		request.setAttribute("list", list);
-		
 		request.setAttribute("pi", pi);
+		request.setAttribute("keyword", keyword);
+		request.setAttribute("condition", condition);
 		
 		request.getRequestDispatcher("views/board/boardListView.jsp").forward(request, response);
 	}

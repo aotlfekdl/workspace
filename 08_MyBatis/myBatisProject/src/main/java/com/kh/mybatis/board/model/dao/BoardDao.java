@@ -13,34 +13,43 @@ public class BoardDao {
 	public int selectListCount(SqlSession sqlSession) {
 		return sqlSession.selectOne("BoardMapper.selectListCount");
 	}
-
-	public ArrayList<Board> selectList(SqlSession sqlSession, PageInfo pi){
-		//mybatis에서는 페이징처리를 위해 RowBounds라는 class를 제공
-		//offset : 몇개의 게시글을 건너뛰고 조회할 것인지
+	
+	public ArrayList<Board> selectList(SqlSession sqlSession, PageInfo pi) {
+		 //마이바티스에서는 페이징처리를 위해 RowBounds라는 class를 제공
+		//offfset : 몇개의 게시글을 건너뛰고 조회할 것인지 
 		//boardLimit : 몇개의 게시글을 가지고 올지
 		
-		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		ArrayList<Board> list = (ArrayList)sqlSession.selectList("BoardMapper.selectList",null, rowBounds);
 		
+		ArrayList<Board> list = (ArrayList)sqlSession.selectList("BoardMapper.selectList", null, rowBounds);
 		return list;
 	}
 	
-	public int selectSeachCount(SqlSession sqlSession, HashMap<String, String> map) {
-		return sqlSession.selectOne("BoardMapper.selectSearchCount");
+	public int selectSearchCount(SqlSession sqlSession, HashMap<String, String> map) {
+		return sqlSession.selectOne("BoardMapper.selectSearchCount", map);
 	}
 	
-	public ArrayList<Board> selectSearchList(SqlSession sqlSession, HashMap<String, String> map, PageInfo pi){
-		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
-		System.out.println("offset : " + offset);
-		System.out.println("Dao : " + pi);
-
-
+	public ArrayList<Board> selectSearchList(SqlSession sqlSession, HashMap<String, String> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
-		ArrayList<Board> list = (ArrayList)sqlSession.selectList("BoardMapper.selectSeachList", map, rowBounds);
-
+		ArrayList<Board> list = (ArrayList)sqlSession.selectList("BoardMapper.selectSearchList", map, rowBounds);
 		return list;
 	}
+	public int increaseCount(SqlSession sqlSession, int boardNo) {
+		int result = 0;
+		result = sqlSession.update("BoardMapper.increaseCount", boardNo);
+		
+		System.out.println("dao : " +result);
+		return result;
+	}
 	
+	
+	public Board selectDetail(SqlSession sqlSession, int boardNo) {
+		Board b = (Board)sqlSession.selectOne("BoardMapper.selectDetail", boardNo);
+		System.out.println(b);
+		return b;
+	}
 }
