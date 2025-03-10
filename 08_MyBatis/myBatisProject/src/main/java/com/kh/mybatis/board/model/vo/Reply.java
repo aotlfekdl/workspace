@@ -1,6 +1,5 @@
 package com.kh.mybatis.board.model.vo;
 
-import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +17,10 @@ public class Reply {
 	private String replyContent;
 	private int refBno;
 	private int replyWriter;
-	private Date createDate;
+	private String createDate;
 	private String status;
 
 	private String userId;
+	private int boardNo;
+	private int userNo;
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.mybatis.board.model.vo.Board;
+import com.kh.mybatis.board.model.vo.Reply;
 import com.kh.mybatis.common.PageInfo;
 
 public interface BoardService {
@@ -14,4 +15,6 @@ public interface BoardService {
 	ArrayList<Board> selectSearchList(HashMap<String, String> map, PageInfo pi);
 	Board selectDetail(int board);
 	int increaseCount(int board);
+	int insertReply(Reply r);
+	ArrayList<Reply> listReply(int boardNo);
 }

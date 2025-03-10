@@ -1,25 +1,29 @@
-package com.kh.mybatis.member.controller;
+package com.kh.mybatis.board.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.kh.mybatis.board.model.vo.Reply;
+import com.kh.mybatis.board.service.BoardServiceImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class MemberLogoutController
+ * Servlet implementation class AjaxReplyListController
  */
-@WebServlet("/logout.me")
-public class MemberLogoutController extends HttpServlet {
+@WebServlet("/rlist.bo")
+public class AjaxReplyListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberLogoutController() {
+    public AjaxReplyListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,14 +32,15 @@ public class MemberLogoutController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int boardNo = Integer.parseInt(request.getParameter("bno"));
 		
-		request.setAttribute("alertMsg", "로그아웃 성공");
-		HttpSession session = request.getSession();
+		ArrayList<Reply> list = new BoardServiceImpl().listReply(boardNo);
 		
-		session.invalidate();
+		response.setContentType("text/html; charset=utf-8");
 		
-		response.sendRedirect(request.getContextPath());
-		}
+		new Gson().toJson(list, response.getWriter());
+	
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

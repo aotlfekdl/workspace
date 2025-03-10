@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.kh.mybatis.board.model.dao.BoardDao;
 import com.kh.mybatis.board.model.vo.Board;
+import com.kh.mybatis.board.model.vo.Reply;
 import com.kh.mybatis.common.PageInfo;
 import com.kh.mybatis.common.Template;
 
@@ -76,7 +77,38 @@ public class BoardServiceImpl implements BoardService{
 		sqlSession.close();
 		return b;
 	}
+	
+	@Override
+	public int insertReply(Reply r) {
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		int result = bDao.insertReply(sqlSession, r);
+		
+		if(result > 0) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
+		}
+		
+		sqlSession.close();
+		return result;
+	}
 
+	@Override
+	public ArrayList<Reply> listReply(int boardNo) {
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		ArrayList<Reply> list = bDao.listReply(sqlSession, boardNo);
+		
+		
+		sqlSession.close();
+		return list;
+	}
+	
+	
+	
+
+	
 
 
 

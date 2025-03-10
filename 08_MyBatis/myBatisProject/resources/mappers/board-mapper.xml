@@ -20,6 +20,18 @@
 	  	<result column="CREATE_DATE" property="createDate"/>
 	  	<result column="STATUS" property="status"/>
   	</resultMap>
+<resultMap type="Reply" id="replyResultMap">
+    <result column="REPLY_NO" property="replyNo"/>
+    <result column="REPLY_CONTENT" property="replyContent"/>
+    <result column="REPLY_WRITER" property="replyWriter"/>
+    <result column="REF_BNO" property="refBno"/>
+    <result column="USER_ID" property="userId"/>
+    <result column="BOARD_NO" property="boardNo"/>
+    <result column="USER_NO" property="userNo"/>
+    <result column="CREATE_DATE" property="createDate" javaType="java.lang.String"/>
+    <result column="STATUS" property="status"/>
+</resultMap>
+
  	<select id="selectListCount" resultType="_int">
  		SELECT COUNT(*)
  		  FROM BOARD
@@ -98,4 +110,32 @@ BOARD_NO = #{boardNo}
  	WHERE BOARD_NO = #{boardNo}
  	AND STATUS = 'Y'
  	</update>
+ 	
+ 	
+ <insert id="insertReply">
+	INSERT INTO 
+	REPLY(
+	REPLY_NO,
+REPLY_CONTENT,
+REF_BNO,
+REPLY_WRITER
+)VALUES(
+	SEQ_RNO.NEXTVAL,
+	#{replyContent},
+	#{refBno},
+	#{replyWriter}
+	)
+ </insert>
+<select id="listReply" resultMap="replyResultMap">
+SELECT REPLY_NO,
+REPLY_CONTENT,
+USER_ID,
+REF_BNO,
+TO_CHAR(CREATE_DATE, 'YY.MM.DD HH24:MI') AS "CREATE_DATE"
+FROM REPLY R
+JOIN MEMBER ON(REPLY_WRITER = USER_NO)
+WHERE R.STATUS = 'Y'
+AND REF_BNO = #{boardNo}
+ORDER BY REPLY_NO DESC
+</select>
 </mapper>
