@@ -1,7 +1,6 @@
-package com.kh.boot.common.controller;
+package com.kh.boot.Controller;
 
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
