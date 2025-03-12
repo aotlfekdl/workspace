@@ -21,7 +21,7 @@
             <form action="insert.me" method="post" id="enrollForm">
                 <div class="form-group">
                     <label for="userId">* ID : </label> 
-                    <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" required>
+                    <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" onkeyup="idCheck(this)" required>
                     <div id="checkResult" style="font-size:0.7em; display:none;"></div>
 					<br>
                     <label for="userPwd">* Password : </label>
@@ -65,6 +65,54 @@
 
     <!-- 푸터바 -->
     <jsp:include page="../common/footer.jsp" />
+
+    <script>
+        let eventFlag;
+        function idCheck(idInput){
+            const id = idInput.value;
+
+
+            //id.trim() -> 공백제거
+            if(id.trim().length >= 5){
+                clearTimeout(eventFlag);  //아직 실행되지 않는 etTimeout 취소
+                eventFlag = setTimeout(function(){
+                    getIdCheck({checkId : id}, drawIdCheckText)
+                },500)
+            }else{
+                document.querySelector("#checkResult").style.display = "none";
+                document.querySelector("#enrollForm button[type = 'submit']").disabled=true;
+            }
+        }
+
+        function getIdCheck(data, callback){
+            $.ajax({
+                url: "/api/member/id",
+                data: data,
+                success: function(res){
+                    callback(res);
+                }, error: function(){
+                    console.log("아이디 중복체크 ajax실패");
+                }
+            })
+        }
+
+        function  drawIdCheckText(isCheck){
+            const submitBtn = document.querySelector("#enrollForm button[type = 'submit']");
+            const checkResult = document.querySelector("#checkResult");
+            checkResult.style.display = "block";
+            if(isCheck ==="NNNNN"){
+                checkResult.style.color = "red";
+                checkResult.innerText = "이미 사용중인 아이디입니다.";
+                submitBtn.disabled=true;
+            }else{
+                checkResult.style.color = "green";
+                checkResult.innerText = " 사용 가능한 아이디입니다.";
+                submitBtn.disabled=false;
+
+            }
+        }
+    </script>
+
     
 </body>
 </html>

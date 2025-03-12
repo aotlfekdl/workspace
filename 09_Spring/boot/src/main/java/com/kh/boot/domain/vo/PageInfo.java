@@ -1,4 +1,5 @@
-package com.kh.mybatis.common;
+package com.kh.boot.domain.vo;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -11,7 +11,7 @@
 	table {width:100%;}
 </style> 
 </head>
-<body>
+<body onload="init(${b.boardNo})">
 	<jsp:include page="../common/header.jsp" />
 
     <div class="content">
@@ -132,6 +132,78 @@
             </table>
         </div>
         <br><br>
+
+        <script>
+            function init(bno){
+                getReplyList(bno, function(list){
+                    console.log("init" +list)
+                    drawReplyList(list);
+                });
+            }
+            function addReply(){
+                //댓글내용, 작성자, 게시글번호
+                const boardNo = ${b.boardNo};
+                const userId = "${loginUser.userId}";
+                const content = document.querySelector("#content").value;
+
+                insertReply({
+                    refBno: boardNo,
+                    replyWriter: userId,
+                    replyContent: content
+                }, drawReplyList)
+            }
+
+            function drawReplyList(list){
+                console.log(list)
+                //TODO 1 댓글목록 가져와서 그리기
+                //data를 이용해서 댓글목록을 불러오고
+                //화면에 맞게 그려주기
+                let str = "";
+                for(let r of list) {
+                    str += "<tr>" +
+                        "<td>" + r.replyWriter + "</td>" +
+                        "<td>" + r.replyContent + "</td>" +
+                        "<td>" + r.replyNo + "</td>" +
+                        "</tr>";
+                    console.log(r);
+                }
+                const replyBody = document.querySelector("#replyArea tbody");
+                replyBody.innerHTML = str;
+
+            }
+            function getReplyList(boardNo, callback){
+                $.ajax({
+                    url:"/api/board/replyList",
+                    dataType: "json",
+                    data: {bno: boardNo},
+                    success: function(list){
+
+                        callback(list);
+
+                    },error: function(){
+
+                        console.log("댓글 조회 ajax통신 실패")
+                    }
+                })
+
+            }
+
+            function insertReply(data, callback){
+                $.ajax({
+                    url: "/api/board/reply",
+                    type: "post",
+                    data: data,
+                    success: function (res){
+                        console.log(data)
+                        contentArea.value="";
+                        drawReplyList(data)
+                        console.log(list)
+                    }, error: function (){
+
+                    }
+                })
+            }
+        </script>
     </div>
     
     <jsp:include page="../common/footer.jsp" />

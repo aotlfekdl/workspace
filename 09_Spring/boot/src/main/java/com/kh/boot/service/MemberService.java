@@ -4,8 +4,11 @@ import com.kh.boot.domain.vo.Member;
 
 public interface MemberService {
     //login
-    Member loginMember(Member m);
+    Member loginMember(String userId);
 
     //회원가입
     int insertMember(Member m);
+
+    //아이디 중복 조회(coubnt)
+    int idCheck(String userId);
 }
