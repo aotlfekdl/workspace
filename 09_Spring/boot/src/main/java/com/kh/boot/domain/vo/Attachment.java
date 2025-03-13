@@ -8,20 +8,15 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class Thumbnail {
-    private int thumbnailNo;
-    private String boardWriter;
-    private String thumbnailTitle;
-    private String thumbnailContent;
+public class Attachment {
+    private int fileNo;
     private int refBno;
+    private String fileTitle;
     private String originName;
     private String changeName;
-    private int count;
     private String filePath;
-    private String uploadDate;
-    private String createDate;
+    private String uploadPath;
     private int fileLevel;
     private String status;
-
 
 }

@@ -1,15 +1,15 @@
 package com.kh.boot.domain.vo;
 
-
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @AllArgsConstructor
+@ToString
 public class Board {
     private int boardNo;
+    private int boardType;
     private String boardTitle;
     private String boardWriter;
     private String boardContent;

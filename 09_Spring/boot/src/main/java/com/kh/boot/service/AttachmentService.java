@@ -5,11 +5,12 @@ import com.kh.boot.domain.vo.Attachment;
 
 import java.util.ArrayList;
 
-public interface ThumbnailService {
-    int selectThumbnailCount();
+public interface AttachmentService {
+    int selectAttachmentCount();
 
-    ArrayList<Attachment> selectThumbnailList(PageInfo pi);
+    ArrayList<Attachment> selectAttachmentList(PageInfo pi);
 
-    int insertThumbnail(Attachment thumbnail);
+    int insertAttachment(Attachment thumbnail);
+
 
 }

@@ -18,10 +18,10 @@
     <div class="content">
         <br><br>
         <div class="innerOuter">
-            <h2>게시글 작성하기</h2>
+            <h2>사진게시글 작성하기</h2>
             <br>
 
-            <form id="enrollForm" method="post" action="insert.bo" enctype="multipart/form-data">
+            <form id="enrollForm" method="post" action="insert.th" enctype="multipart/form-data">
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
@@ -32,13 +32,34 @@
                         <td><input type="text" id="writer" class="form-control" value="${loginUser.userId }" name="boardWriter" readonly></td>
                     </tr>
                     <tr>
-                        <th><label for="upfile">첨부파일</label></th>
+                        <th><label for="upfile">대표이미지</label></th>
                         <td><input type="file" id="upfile" class="form-control-file border" name="upfile"></td>
                     </tr>
                     <tr>
                         <th><label for="content">내용</label></th>
                         <td><textarea id="content" class="form-control" rows="10" style="resize:none;" name="boardContent" required></textarea></td>
                     </tr>
+<%--                    <tr>--%>
+<%--                        <th><label for="upfileLv2-1">세부이미지</label></th>--%>
+<%--                        <td><input type="file" id="upfileLv2-1" class="form-control-file border" name="upfileLv2"></td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <th><label for="upfileLv2-2">세부이미지</label></th>--%>
+<%--                        <td><input type="file" id="upfileLv2-2" class="form-control-file border" name="upfileLv2"></td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <th><label for="upfileLv2-3">세부이미지</label></th>--%>
+<%--                        <td><input type="file" id="upfileLv2-3" class="form-control-file border" name="upfileLv2"></td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <th><label for="upfileLv2-4">세부이미지</label></th>--%>
+<%--                        <td><input type="file" id="upfileLv2-4" class="form-control-file border" name="upfileLv2"></td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <th><label for="upfileLv2-5">세부이미지</label></th>--%>
+<%--                        <td><input type="file" id="upfileLv2-5" class="form-control-file border" name="upfileLv2"></td>--%>
+<%--                    </tr>--%>
+
                 </table>
                 <br>
 

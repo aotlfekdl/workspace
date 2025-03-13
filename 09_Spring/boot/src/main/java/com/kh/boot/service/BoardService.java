@@ -26,4 +26,12 @@ public interface BoardService {
     int insertReply(Reply reply);
 
     ArrayList<Reply> selectReplyList(int boardNo);
+
+    //게시글 조회수 탑5
+    ArrayList<Board> getBoardTopn(String orther, int limit);
+
+    //게시글 수정
+    int updateBoard(Board board);
+
+    int insertAttachment1(Board board);
 }

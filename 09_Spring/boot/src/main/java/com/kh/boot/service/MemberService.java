@@ -9,6 +9,6 @@ public interface MemberService {
     //회원가입
     int insertMember(Member m);
 
-    //아이디 중복 조회(coubnt)
+    //아이디 중복 조회(count)
     int idCheck(String userId);
 }

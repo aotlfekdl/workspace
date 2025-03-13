@@ -3,7 +3,7 @@ package com.kh.boot.service;
 
 import com.kh.boot.domain.vo.PageInfo;
 import com.kh.boot.domain.vo.Attachment;
-import com.kh.boot.mappers.ThumbnailMapper;
+import com.kh.boot.mappers.AttachmentMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -12,25 +12,25 @@ import java.util.ArrayList;
 
 @RequiredArgsConstructor //이게 Autowired 역할을 해줌
 @Service
-public class ThumbnailServiceImpl implements ThumbnailService {
+public class AttachmentServiceImpl implements AttachmentService {
 
-    private final ThumbnailMapper thumbnailMapper;
+    private final AttachmentMapper attachmentMapper;
     @Override
-    public int selectThumbnailCount() {
-        return thumbnailMapper.selectThumbnailCount();
+    public int selectAttachmentCount() {
+        return attachmentMapper.selectAttachmentCount();
     }
 
     @Override
-    public ArrayList<Attachment> selectThumbnailList(PageInfo pi) {
+    public ArrayList<Attachment> selectAttachmentList(PageInfo pi) {
         int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 
-        return thumbnailMapper.selectThumbnailList(rowBounds);
+        return attachmentMapper.selectAttachmentList(rowBounds);
     }
 
     @Override
-    public int insertThumbnail(Attachment thumbnail) {
-        return thumbnailMapper.insertThumbnail(thumbnail);
+    public int insertAttachment(Attachment thumbnail) {
+        return attachmentMapper.insertAttachment(thumbnail);
     }
 
 

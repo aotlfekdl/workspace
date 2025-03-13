@@ -56,5 +56,21 @@ public class BoardServiceImpl  implements BoardService {
         return boardMapper.selectReplyList(boardNo);
     }
 
+    @Override
+    public ArrayList<Board> getBoardTopn(String orther, int limit) {
+        RowBounds rowBounds = new RowBounds(0, limit);
+        return boardMapper.getBoardTopn(rowBounds, orther);
+    }
+
+    @Override
+    public int updateBoard(Board board) {
+        return boardMapper.updateBoard(board);
+    }
+
+    @Override
+    public int insertAttachment1(Board board) {
+        return boardMapper.insertAttachment1(board);
+    }
+
 
 }

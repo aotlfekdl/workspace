@@ -1,4 +1,4 @@
-package com.kh.boot.controller;
+package com.kh.boot.Controller;
 
 import com.kh.boot.domain.vo.Member;
 import com.kh.boot.service.MemberService;

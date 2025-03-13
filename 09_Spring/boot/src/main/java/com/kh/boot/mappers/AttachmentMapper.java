@@ -7,10 +7,10 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.ArrayList;
 
 @Mapper
-public interface ThumbnailMapper {
-    int selectThumbnailCount();
+public interface AttachmentMapper {
+    int selectAttachmentCount();
 
-    ArrayList<Attachment> selectThumbnailList(RowBounds rowBounds);
+    ArrayList<Attachment> selectAttachmentList(RowBounds rowBounds);
 
-    int insertThumbnail(Attachment thumbnail);
+    int insertAttachment(Attachment thumbnail);
 }

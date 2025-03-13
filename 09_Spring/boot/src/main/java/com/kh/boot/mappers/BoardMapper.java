@@ -24,5 +24,11 @@ public interface BoardMapper {
 
     int insertReply(Reply reply);
 
-    ArrayList<Reply> selectReplyList(@Param("bno") int boardNo);
+    ArrayList<Reply> selectReplyList(@Param("boardNo") int boardNo);
+
+    ArrayList<Board> getBoardTopn(RowBounds rowBounds,@Param("other") String other);
+
+    int updateBoard(Board board);
+
+    int insertAttachment1(Board board);
 }
