@@ -136,13 +136,13 @@
         <script>
             function init(bno){
                 getReplyList(bno, function(list){
-                    console.log("init" +list)
+                    console.log("init", list);
                     drawReplyList(list);
                 });
             }
+
             function addReply(){
-                //댓글내용, 작성자, 게시글번호
-                const boardNo = ${b.boardNo};
+                const boardNo = Number("${b.boardNo}");
                 const userId = "${loginUser.userId}";
                 const content = document.querySelector("#content").value;
 
@@ -150,42 +150,48 @@
                     refBno: boardNo,
                     replyWriter: userId,
                     replyContent: content
-                }, drawReplyList)
+                }, drawReplyList);
             }
 
             function drawReplyList(list){
-                console.log(list)
-                //TODO 1 댓글목록 가져와서 그리기
-                //data를 이용해서 댓글목록을 불러오고
-                //화면에 맞게 그려주기
-                let str = "";
-                for(let r of list) {
-                    str += "<tr>" +
-                        "<td>" + r.replyWriter + "</td>" +
-                        "<td>" + r.replyContent + "</td>" +
-                        "<td>" + r.replyNo + "</td>" +
-                        "</tr>";
-                    console.log(r);
-                }
-                const replyBody = document.querySelector("#replyArea tbody");
-                replyBody.innerHTML = str;
+                console.log("댓글 목록:", list);
 
+                let str = "";
+
+                if (!list || list.length === 0) {
+                    str = "<tr><td colspan='3' style='text-align:center;'>등록된 댓글이 없습니다.</td></tr>";
+                } else {
+                    for(let r of list) {
+                        str += "<tr>" +
+                            "<td>" + r.replyWriter + "</td>" +
+                            "<td>" + r.replyContent + "</td>" +
+                            "<td>" + r.replyNo + "</td>" +
+                            "</tr>";
+                    }
+                }
+
+                document.querySelector("#replyArea tbody").innerHTML = str;
             }
+
             function getReplyList(boardNo, callback){
+                console.log("boardNo :" +boardNo)
                 $.ajax({
+
                     url:"/api/board/replyList",
                     dataType: "json",
                     data: {bno: boardNo},
-                    success: function(list){
+                    success: function(replyList){
 
-                        callback(list);
-
-                    },error: function(){
-
-                        console.log("댓글 조회 ajax통신 실패")
+                        console.log("받은 데이터"+replyList);
+                        if (callback && typeof callback === "function") {
+                            callback(replyList);
+                        } else {
+                        }
+                    },
+                    error: function(){
+                        console.log("댓글 조회 ajax통신 실패");
                     }
-                })
-
+                });
             }
 
             function insertReply(data, callback){
@@ -194,15 +200,18 @@
                     type: "post",
                     data: data,
                     success: function (res){
-                        console.log(data)
-                        contentArea.value="";
-                        drawReplyList(data)
-                        console.log(list)
-                    }, error: function (){
+                        console.log("댓글 등록 성공:", res);
 
+                        document.querySelector("#content").value = "";  // ✅ 댓글 입력창 초기화
+
+                        getReplyList(data.refBno, callback); // ✅ 댓글 목록 다시 불러오기
+                    },
+                    error: function (){
+                        console.log("댓글 등록 실패");
                     }
-                })
+                });
             }
+
         </script>
     </div>
     

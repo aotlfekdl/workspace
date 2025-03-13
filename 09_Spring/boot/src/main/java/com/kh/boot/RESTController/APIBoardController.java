@@ -1,14 +1,12 @@
 package com.kh.boot.RESTController;
 
 
+import com.kh.boot.domain.vo.Board;
 import com.kh.boot.domain.vo.Reply;
 import com.kh.boot.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -27,14 +25,13 @@ public class APIBoardController {
     }
 
     @GetMapping("/replyList")
-    public ArrayList<Reply> selectReplyList(Reply r){
+    public ArrayList<Reply> selectReplyList(@RequestParam("bno") int boardNo){
 
-        int boardNo = r.getRefBno();
-        ArrayList<Reply> list = boardService.selectReplyList(boardNo);
 
-        System.out.println(list);
+        System.out.println(boardNo);
+        System.out.println("boardService.selectReplyList(boardNo) :"+ boardService.selectReplyList(boardNo));
+        return boardService.selectReplyList(boardNo);
 
-        return list;
     }
 
 }
