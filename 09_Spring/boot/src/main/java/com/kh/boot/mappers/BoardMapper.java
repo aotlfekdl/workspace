@@ -1,5 +1,6 @@
 package com.kh.boot.mappers;
 
+import com.kh.boot.domain.vo.Attachment;
 import com.kh.boot.domain.vo.Board;
 import com.kh.boot.domain.vo.Reply;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +32,9 @@ public interface BoardMapper {
     int updateBoard(Board board);
 
     int insertAttachment1(Board board);
+
+    Board selectBoardNo();
+
+    ArrayList<Attachment> selectAttachment(@Param("bno") int boardNo);
+
 }

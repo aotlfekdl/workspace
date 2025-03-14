@@ -36,20 +36,30 @@
       </tr>
       </thead>
       <tbody>
-      <c:forEach var="b" items="${list}">
-        <tr onclick = "location.href = 'detail.bo?bno=${b.boardNo}'">
-          <td>${b.boardNo }</td>
-          <td>${b.boardTitle }</td>
-          <td>${b.boardWriter }</td>
-          <td>${b.count }</td>
-          <td>${b.createDate }</td>
-          <td>
-            <c:if test="${not empty b.originName }">
-              ★
+      <div class="list-area">
+
+            <c:forEach var="b" items="${list}">
+
+
+              <div class="thumbnail" align="center" onclick="location.href = 'detail.th?bno=${b.boardNo}'">
+                <img width="200px" height="150px" src="${b.changeName}" alt="썸네일이미지">
+                <p>
+                  <span>No. ${b.boardNo} ${b.boardTitle}</span><br>
+                  조회수 : ${b.count}
+                </p>
+              </div>
+
+
+            </c:forEach>
+
+
+            <c:if test="${loginUser != null}">
+              <div align="center">
+                <a href="/enrollForm.th" class="btn btn-sm btn-primary">게시글 작성</a>
+              </div>
             </c:if>
-          </td>
-        </tr>
-      </c:forEach>
+
+      </div>
       </tbody>
     </table>
 

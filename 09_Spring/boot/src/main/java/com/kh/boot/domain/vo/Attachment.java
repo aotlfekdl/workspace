@@ -11,11 +11,10 @@ import lombok.*;
 public class Attachment {
     private int fileNo;
     private int refBno;
-    private String fileTitle;
     private String originName;
     private String changeName;
     private String filePath;
-    private String uploadPath;
+    private String uploadDate;
     private int fileLevel;
     private String status;
 

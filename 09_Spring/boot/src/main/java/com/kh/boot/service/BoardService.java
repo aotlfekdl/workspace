@@ -1,5 +1,6 @@
 package com.kh.boot.service;
 
+import com.kh.boot.domain.vo.Attachment;
 import com.kh.boot.domain.vo.Board;
 import com.kh.boot.domain.vo.PageInfo;
 import com.kh.boot.domain.vo.Reply;
@@ -34,4 +35,8 @@ public interface BoardService {
     int updateBoard(Board board);
 
     int insertAttachment1(Board board);
+
+    Board selectBoardNo();
+
+    ArrayList<Attachment> selectAttachment(int boardNo);
 }

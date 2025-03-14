@@ -19,11 +19,10 @@
     <resultMap id="attachmentResult" type="Attachment">
         <result column="FILE_NO" property="fileNo"/>
         <result column="REF_BNO" property="refBno"/>
-        <result column="FILE_TITLE" property="refBno"/>
         <result column="ORIGIN_NAME" property="originName"/>
         <result column="CHANGE_NAME" property="changeName"/>
         <result column="FILE_PATH" property="filePath"/>
-        <result column="UPLOAD_DATE" property="uploadPath"/>
+        <result column="UPLOAD_DATE" property="uploadDate"/>
         <result column="FILE_LEVEL" property="fileLevel"/>
         <result column="STATUS" property="status"/>
 
@@ -46,6 +45,7 @@
         BOARD_TITLE,
         BOARD_WRITER,
         ORIGIN_NAME,
+        CHANGE_NAME,
         COUNT,
         TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
         FROM BOARD
@@ -57,24 +57,32 @@
 
     <insert id="insertAttachment">
         INSERT
-        INTO BOARD(
-        BOARD_NO,
-        BOARD_TYPE,
-        BOARD_TITLE,
-        BOARD_WRITER,
-        BOARD_CONTENT,
+        INTO ATTACHMENT(
+        FILE_NO,
+        REF_BNO,
         ORIGIN_NAME,
-        CHANGE_NAME
-        ) VALUES (
-        SEQ_BNO.NEXTVAL,
-        2,
-        #{boardTitle},
-        #{boardWriter},
-        #{boardContent},
+        CHANGE_NAME,
+        FILE_PATH,
+        FILE_LEVEL
+        ) VALUES(
+        SEQ_FNO.NEXTVAL,
+        #{refBno},
         #{originName},
-        #{changeName}
+        #{changeName},
+        #{filePath},
+        2
         )
     </insert>
+
+    <select id="selectAttachment" resultMap="attachmentResult">
+        SELECT REF_BNO,
+            ORIGIN_NAME,
+            CHANGE_NAME
+        FROM ATTACHMENT
+        WHERE STATUS = 'Y'
+        AND REF_BNO = #{boardNo}
+    </select>
+
 
 
 </mapper>

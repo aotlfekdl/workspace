@@ -22,6 +22,18 @@
         <result column="REPLY_WRITER" property="replyWriter"/>
         <result column="CREATE_DATE" property="createDate"/>
     </resultMap>
+
+    <resultMap id="attachmentResult" type="Attachment">
+        <result column="FILE_NO" property="fileNo"/>
+        <result column="REF_BNO" property="refBno"/>
+        <result column="ORIGIN_NAME" property="originName"/>
+        <result column="CHANGE_NAME" property="changeName"/>
+        <result column="FILE_PATH" property="filePath"/>
+        <result column="UPLOAD_DATE" property="uploadDate"/>
+        <result column="FILE_LEVEL" property="fileLevel"/>
+        <result column="STATUS" property="status"/>
+
+    </resultMap>
     <select id="selectBoardCount" resultType="_int">
         SELECT COUNT(*)
         FROM BOARD
@@ -34,7 +46,8 @@
         BOARD_WRITER,
         ORIGIN_NAME,
         COUNT,
-        TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+        TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE,
+        CHANGE_NAME
         FROM BOARD
         WHERE STATUS = 'Y'
         AND BOARD_TYPE = 1
@@ -154,5 +167,20 @@
         )
     </insert>
 
+    <select id="selectBoardNo" resultMap="boardResult">
+        SELECT BOARD_NO
+        FROM BOARD
+        ORDER BY BOARD_NO DESC
+        FETCH FIRST 1 ROW ONLY
+    </select>
 
+
+    <select id="selectAttachment" resultMap="attachmentResult">
+        SELECT REF_BNO,
+        ORIGIN_NAME,
+        CHANGE_NAME
+        FROM ATTACHMENT
+        WHERE STATUS = 'Y'
+        AND REF_BNO = #{bno}
+    </select>
 </mapper>

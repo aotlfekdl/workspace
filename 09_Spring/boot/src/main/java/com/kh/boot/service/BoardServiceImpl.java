@@ -1,5 +1,6 @@
 package com.kh.boot.service;
 
+import com.kh.boot.domain.vo.Attachment;
 import com.kh.boot.domain.vo.Board;
 import com.kh.boot.domain.vo.PageInfo;
 import com.kh.boot.domain.vo.Reply;
@@ -70,6 +71,16 @@ public class BoardServiceImpl  implements BoardService {
     @Override
     public int insertAttachment1(Board board) {
         return boardMapper.insertAttachment1(board);
+    }
+
+    @Override
+    public Board selectBoardNo() {
+        return boardMapper.selectBoardNo();
+    }
+
+    @Override
+    public ArrayList<Attachment> selectAttachment(int boardNo) {
+        return boardMapper.selectAttachment(boardNo);
     }
 
 

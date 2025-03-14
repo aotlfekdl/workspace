@@ -8,6 +8,7 @@ import com.kh.boot.service.AttachmentService;
 import com.kh.boot.utils.Template;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +70,7 @@ public class BoardController {
     public String selectBoardDetail(int bno, Model model) {
         int result = boardService.increaseCount(bno);
 
+
         if(result > 0){
             Board b = boardService.selectBoard(bno);
             model.addAttribute("b", b);
@@ -117,8 +119,17 @@ public class BoardController {
         int count = attachmentService.selectAttachmentCount();
 
         PageInfo pi = new PageInfo(count, cpage, 10, 5);
-        ArrayList<Attachment> list = attachmentService.selectAttachmentList(pi);
 
+
+
+        ArrayList<Board> list = boardService.selectBoardList(pi);
+
+
+
+
+
+        model.addAttribute("list", list);
+        model.addAttribute("pi", pi);
 
         return "board/thumbnailListView";
 
@@ -130,29 +141,65 @@ public class BoardController {
     }
 
     @PostMapping("insert.th")
-    public String insertAttachment(@ModelAttribute Board board, MultipartFile upfile, HttpSession session, Model model){
+    public String insertAttachment(@ModelAttribute Board board,Attachment attachment ,MultipartFile upfile, ArrayList<MultipartFile> upfileLv2, HttpSession session, Model model){
         //System.out.println(attachment);
         System.out.println(upfile.getOriginalFilename());
 
-        System.out.println(upfile);
+        System.out.println("upfile :" +upfile.getOriginalFilename());
 
         System.out.println("insert.th 경로 :"+board);
+
+
+
+        System.out.println("upfileLv2.getOriginalFilename().length()"+upfileLv2);
+
+        System.out.println("upfileLv2"+upfileLv2);
+
+        System.out.println("Attachment"+attachment);
+
+
 
         if(!upfile.getOriginalFilename().equals("")){
             String changeName = Template.saveFile(upfile, session, "/resources/uploadfile/");
 
             board.setChangeName("/resources/uploadfile/" + changeName);
             board.setOriginName(upfile.getOriginalFilename());
+            System.out.println("board2 : "+board);
+
         }
-
-
-
         int result = boardService.insertAttachment1(board);
 
-        //int result3 = attachmentService.insertAttachment(attachment);
+
+        Board boardNo = boardService.selectBoardNo();
+        for(int i=0; i<upfileLv2.size();i++){
+            if(!upfileLv2.get(i).getOriginalFilename().equals("")){
+                String changeName = Template.saveFile((upfileLv2.get(i)), session, "/resources/uploadfile/");
+
+
+                attachment.setChangeName("/resources/uploadfile/" + changeName);
+                attachment.setOriginName(upfileLv2.get(i).getOriginalFilename());
+                attachment.setRefBno(boardNo.getBoardNo());
+
+                attachment.setFilePath("/resources/uploadfile/");
+
+                System.out.println("last : "+attachment);
+
+
+            }
+            int result2 = attachmentService.insertAttachment(attachment);
+
+        }
+
+        System.out.println("boardNo : "+boardNo);
+        System.out.println("board3 : "+board);
+
+
 
         if(result > 0){
             session.setAttribute("alertMsg", "게시글 작성 성공");
+
+            model.addAttribute("board",board);
+            model.addAttribute("attachment",attachment);
             return "redirect:/list.th";
         } else {
             model.addAttribute("errorMsg", "게시글 작성 실패");
@@ -161,6 +208,24 @@ public class BoardController {
 
     }
 
+
+    @GetMapping("detail.th")
+    public String Thumbnaildetail(int bno, Model model){
+        ArrayList<Attachment> attachment = attachmentService.selectAttachment(bno);
+        System.out.println(bno);
+
+
+        System.out.println("attachment : "+attachment);
+
+
+        Board board = boardService.selectBoard(bno);
+        System.out.println("board : "+board);
+        model.addAttribute("board",board);
+        model.addAttribute("attachment",attachment);
+
+
+        return "board/thumbnailDetailView";
+    }
 
 
 

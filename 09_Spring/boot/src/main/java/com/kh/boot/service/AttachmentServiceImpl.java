@@ -33,5 +33,10 @@ public class AttachmentServiceImpl implements AttachmentService {
         return attachmentMapper.insertAttachment(thumbnail);
     }
 
+    @Override
+    public ArrayList<Attachment> selectAttachment(int boardNo) {
+        return attachmentMapper.selectAttachment(boardNo);
+    }
+
 
 }
